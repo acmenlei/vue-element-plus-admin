@@ -15,6 +15,7 @@
         - config.ts -> axios基础配置
     - App.vue  -> 主界面
     - main.ts  -> 入口文件
+- .env  -> 无论哪个模式都会加载的环境变量
 - .env.development -> 开发环境定义的环境变量
 - .env.production -> 生产模式定义的环境变量
 ...
