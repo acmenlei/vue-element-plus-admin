@@ -6,11 +6,17 @@ import { hideLoading, showLoading } from "@/common/loading"
 
 const service = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL as string,
-  timeout: 5000
+  timeout: 5000,
+  withCredentials: true
 })
 // 请求拦截 统一配置
 service.interceptors.request.use(config => {
   showLoading()
+  config.headers = config.headers || {}
+  if (config.url == "/upload") {
+    config.headers["Content-Type"] = 'multiparty/form-data'
+  }
+  console.log(config.headers)
   return config
 }, err => {
   hideLoading()
