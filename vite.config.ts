@@ -26,7 +26,7 @@ export default ({ mode, command }) => {
         modules: [
           {
             path: "https://unpkg.com/element-plus",
-            css: "https://unpkg.com/element-plus/dist/index.css",
+            // css: "https://unpkg.com/element-plus/dist/index.css",
             name: "element-plus",
             var: "ElementPlus"
           }
