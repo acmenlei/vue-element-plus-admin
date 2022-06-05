@@ -1,7 +1,7 @@
 import { ref } from "vue"
-import {
-  query, update
-} from "@/service/todo"
+import { query, update } from "@/service/todo"
+import { getCookie } from "@/common/cookie";
+import { USERNAME, useUserStore } from "@/store/modules/user";
 
 // tasks item type...
 export interface TodoItem {
@@ -16,7 +16,17 @@ export function useTodo() {
   // get
   async function queryTodo() {
     const data: any = await query();
-    tasks.value = data.tasks;
+    // query user todo list
+    const userStore = useUserStore();
+    userStore.updateUsers(data.users);
+
+    const username = getCookie(USERNAME)
+    for (let user of data.users) {
+      if (username == user.username) {
+        tasks.value = user.tasks;
+        break;
+      }
+    }
   }
   // update
   async function submitTodo() {
@@ -30,7 +40,7 @@ export function useTodo() {
     }
     // rest
     task.value = "";
-    await update({ tasks: tasks.value });
+    updateTodo_helper()
   }
   // status change
   async function changeTodo(idx: number) {
@@ -41,17 +51,31 @@ export function useTodo() {
       default: break;
     }
     // update remote list
-    await update({ tasks: tasks.value });
+    updateTodo_helper()
   }
   // del
   async function deleteTodo(idx: number) {
     tasks.value.splice(idx, 1);
-    await update({ tasks: tasks.value });
+    updateTodo_helper()
   }
   // edit
   function editTodo(idx: number) {
     task.value = tasks.value[idx].name;
     currentIdx.value = idx;
+  }
+  
+  // 统一更新函数
+  async function updateTodo_helper() {
+    let userStore = useUserStore();
+    const users = userStore.users
+    for (let i = users.length - 1; i >= 0; i--) {
+      // 找当前用户的tasks
+      if (users[i].username == userStore.username) {
+        users[i].tasks = tasks.value;
+        break;
+      }
+    }
+    await update({ users });
   }
 
   return {

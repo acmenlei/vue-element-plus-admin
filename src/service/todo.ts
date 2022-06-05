@@ -1,4 +1,4 @@
-const REQUEST_URL = "https://getpantry.cloud/apiv1/pantry/50d468e6-7cc6-4960-839d-3f5ebf478688/basket/coderlei_todo"
+const REQUEST_URL = "https://getpantry.cloud/apiv1/pantry/50d468e6-7cc6-4960-839d-3f5ebf478688/basket/users"
 
 export function query() {
   return new Promise((resolve) => {

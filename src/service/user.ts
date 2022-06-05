@@ -15,4 +15,3 @@ export function registerUser(data: any) {
       .then(resp => resp.json().then(rest => resolve(rest)).catch(reason => resolve(reason)))
   })
 }
-

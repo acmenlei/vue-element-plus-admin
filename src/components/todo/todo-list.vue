@@ -1,15 +1,21 @@
 <script setup lang='ts'>
+import { useUserStore } from '@/store/modules/user';
 import { useTodo } from './scripts'
+
 // use Todo List Logic...
 const { tasks, task, queryTodo, submitTodo, changeTodo, deleteTodo, editTodo } = useTodo();
 // init tasks data...
 queryTodo()
+// logout current account
+function logout() {
+  useUserStore().logout()
+}
 </script>
 
 <template>
   <div class="todo-list">
     <!-- Heading -->
-    <h2 class="text-center">Todo List</h2>
+    <h2 class="text-center">{{ useUserStore().username }} 's Todo List</h2>
     <!-- Input -->
     <div class="flex-container">
       <input type="text" v-model="task" placeholder="Enter task" />
@@ -57,6 +63,9 @@ queryTodo()
         </tr>
       </tbody>
     </table>
+    <div class="logout">
+      <button @click="logout">LOGOUT</button>
+    </div>
   </div>
 </template>
 
@@ -155,5 +164,20 @@ queryTodo()
 }
 .edit-btn {
   background-color: #999;
+}
+
+.logout button{
+  margin-top: 10px;
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 5px;
+  background: gray;
+  color: white;
+  transition: .2s;
+  cursor: pointer;
+}
+.logout button:hover {
+  transform: scale(1, 1.05);
 }
 </style>

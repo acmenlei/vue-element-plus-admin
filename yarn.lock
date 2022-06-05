@@ -346,6 +346,11 @@ constantinople@^4.0.1:
     "@babel/parser" "^7.6.0"
     "@babel/types" "^7.6.1"
 
+cookies-ts@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.npmmirror.com/cookies-ts/-/cookies-ts-1.0.5.tgz#33e3afc51831b7a9c06cf4e7bbead97e938d44e1"
+  integrity sha512-WpfZCpgrkbo1L39ZHCSvSV2xSERuzlCdGFyIT8QFFmmyPe6UWrNaq8DCIyluo9VmLLlXb1v7go2xrxcYNSCxBg==
+
 csstype@^2.6.8:
   version "2.6.19"
   resolved "https://registry.npmmirror.com/csstype/-/csstype-2.6.19.tgz#feeb5aae89020bb389e1f63669a5ed490e391caa"

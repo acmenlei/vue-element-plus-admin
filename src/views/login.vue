@@ -1,4 +1,4 @@
-users, <script setup lang='ts'>
+<script setup lang='ts'>
 import { ref, onMounted, reactive } from 'vue'
 import { queryUserList, registerUser } from "@/service/user"
 import { useUserStore } from '@/store/modules/user';
@@ -10,6 +10,7 @@ const signInButton = ref<HTMLElement>()
 const signUpButton = ref<HTMLElement>()
 const router = useRouter()
 
+// 加载完成后执行
 onMounted(() => {
   signUpButton.value?.addEventListener('click', () => container.value?.classList.add('right-panel-active'));
   signInButton.value?.addEventListener('click', () => container.value?.classList.remove('right-panel-active'));
@@ -23,11 +24,9 @@ function useLogin() {
   async function login() {
     try {
       let data: any = await queryUserList()
-      let userStore = useUserStore()
-      userStore.users = data.users
       // 标记是否找到用户
-      let flag = ""
-      for (let { username, password } of userStore.users) {
+      let flag = "";
+      for (let { username, password } of data.users) {
         if (username == loginForm.username) {
           flag = password;
           break;
@@ -36,16 +35,23 @@ function useLogin() {
       if (flag) {
         // 有这个用户 那么判断他的密码
         let rest: boolean = flag == loginForm.password
-        rest && router.replace('/home')
-        rest ? successNotification("登陆结果提示", "登陆成功!") : errorNotification("登陆结果提示", "密码错误!")
+        // 密码正确
+        if (rest) {
+          let userStore = useUserStore()
+          userStore.login(loginForm.username, data.users);
+          router.replace('/home')
+          successNotification("登陆结果提示", "登陆成功!")
+        } else {
+          errorNotification("登陆结果提示", "密码错误!")
+        }
       } else {
         errorNotification("登陆结果提示", "账号不存在!")
       }
     } catch {
       errorNotification("网络提示", '网络出错了!')
     }
-    loginForm.username = ""
-    loginForm.password = ""
+    loginForm.username = "";
+    loginForm.password = "";
   }
   return {
     loginForm, login
@@ -59,7 +65,13 @@ function useRegister() {
   })
   async function register() {
     let userStore = useUserStore()
-    userStore.users.push({ username: registerForm.username, password: registerForm.password })
+    for (let { username } of userStore.users) {
+      if (username == registerForm.username) {
+        errorNotification('注册提示', '该用户已经存在了，冲重新选择一个用户名！')
+        return;
+      }
+    }
+    userStore.users.push({ username: registerForm.username, password: registerForm.password, tasks: [] })
     await registerUser({ users: userStore.users })
     successNotification("注册提示", "注册成功, 快去登陆吧!")
     signInButton.value?.click()
@@ -77,6 +89,7 @@ const { register, registerForm } = useRegister()
 </script>
 
 <template>
+  <p style="text-align: center;">&lt;&lt;登陆查看我的待办集&gt;&gt;</p>
   <div class='container' ref="container" id='container'>
     <div class="form-container sign-up-container">
       <!-- 注册 -->
