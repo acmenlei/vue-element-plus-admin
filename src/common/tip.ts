@@ -12,3 +12,8 @@ export enum RegisterTips {
   HAS_EXIST_USER = '该用户已经存在了，冲重新选择一个用户名！',
   SUCCESS = '注册成功, 快去登陆吧!'
 }
+
+export enum OperatorTips {
+  SUCCESS = '操作成功!',
+  ERROR = '操作失败!'
+}
