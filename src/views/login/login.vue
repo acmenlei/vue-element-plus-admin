@@ -1,8 +1,19 @@
 <script setup lang='ts'>
+import { ref, onMounted } from 'vue'
+
 import { useLogin, useRegister } from "./scripts"
 
+const container = ref<HTMLElement>()
+const signInButton = ref<HTMLElement>()
+const signUpButton = ref<HTMLElement>()
+
+onMounted(() => {
+  signUpButton.value?.addEventListener('click', () => container.value?.classList.add('right-panel-active'));
+  signInButton.value?.addEventListener('click', () => container.value?.classList.remove('right-panel-active'));
+})
+
 const { login, loginForm } = useLogin()
-const { register, registerForm } = useRegister()
+const { register, registerForm } = useRegister(signInButton)
 
 </script>
 

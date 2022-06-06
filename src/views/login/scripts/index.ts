@@ -1,20 +1,9 @@
-import { ref, onMounted, reactive } from 'vue'
-import { useRouter } from "vue-router"
-
+import { reactive, Ref } from 'vue'
 import { queryUserList, registerUser } from "@/service/user"
 import { useUserStore } from '@/store/modules/user';
 import { successNotification, errorNotification } from '@/common/message';
 import { LoginTips, NetWorkTips, RegisterTips } from '@/common/tip';
-
-const container = ref<HTMLElement>()
-const signInButton = ref<HTMLElement>()
-const signUpButton = ref<HTMLElement>()
-const router = useRouter()
-
-onMounted(() => {
-  signUpButton.value?.addEventListener('click', () => container.value?.classList.add('right-panel-active'));
-  signInButton.value?.addEventListener('click', () => container.value?.classList.remove('right-panel-active'));
-})
+import router from '@/router';
 
 // user login hook
 export function useLogin() {
@@ -60,7 +49,7 @@ export function useLogin() {
 }
 
 // user register hook
-export function useRegister() {
+export function useRegister(signInButton: Ref<HTMLElement | undefined>) {
   let registerForm = reactive({
     username: "",
     password: ""
