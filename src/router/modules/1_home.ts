@@ -4,5 +4,5 @@ export default {
     icon: 'iconfont-xxx',
   },
   path: '/home',
-  component: () => import("@/views/home.vue"),
+  component: () => import("@/views/home/home.vue"),
 }

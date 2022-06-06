@@ -19,7 +19,7 @@ const defaultRouteConfiguras = [
   {
     path: '/login',
     name: '登录',
-    component: () => import("@/views/login.vue")
+    component: () => import("@/views/login/login.vue")
   },
   {
     path: '/:pathMatch(.*)*',

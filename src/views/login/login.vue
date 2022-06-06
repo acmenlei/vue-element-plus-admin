@@ -1,87 +1,5 @@
 <script setup lang='ts'>
-import { ref, onMounted, reactive } from 'vue'
-import { queryUserList, registerUser } from "@/service/user"
-import { useUserStore } from '@/store/modules/user';
-import { successNotification, errorNotification } from '@/common/message';
-import { useRouter } from "vue-router"
-
-const container = ref<HTMLElement>()
-const signInButton = ref<HTMLElement>()
-const signUpButton = ref<HTMLElement>()
-const router = useRouter()
-
-// 加载完成后执行
-onMounted(() => {
-  signUpButton.value?.addEventListener('click', () => container.value?.classList.add('right-panel-active'));
-  signInButton.value?.addEventListener('click', () => container.value?.classList.remove('right-panel-active'));
-})
-
-function useLogin() {
-  let loginForm = reactive({
-    username: "",
-    password: ""
-  })
-  async function login() {
-    try {
-      let data: any = await queryUserList()
-      // 标记是否找到用户
-      let flag = "";
-      for (let { username, password } of data.users) {
-        if (username == loginForm.username) {
-          flag = password;
-          break;
-        }
-      }
-      if (flag) {
-        // 有这个用户 那么判断他的密码
-        let rest: boolean = flag == loginForm.password
-        // 密码正确
-        if (rest) {
-          let userStore = useUserStore()
-          userStore.login(loginForm.username, data.users);
-          router.replace('/home')
-          successNotification("登陆结果提示", "登陆成功!")
-        } else {
-          errorNotification("登陆结果提示", "密码错误!")
-        }
-      } else {
-        errorNotification("登陆结果提示", "账号不存在!")
-      }
-    } catch {
-      errorNotification("网络提示", '网络出错了!')
-    }
-    loginForm.username = "";
-    loginForm.password = "";
-  }
-  return {
-    loginForm, login
-  }
-}
-
-function useRegister() {
-  let registerForm = reactive({
-    username: "",
-    password: ""
-  })
-  async function register() {
-    let userStore = useUserStore()
-    for (let { username } of userStore.users) {
-      if (username == registerForm.username) {
-        errorNotification('注册提示', '该用户已经存在了，冲重新选择一个用户名！')
-        return;
-      }
-    }
-    userStore.users.push({ username: registerForm.username, password: registerForm.password, tasks: [] })
-    await registerUser({ users: userStore.users })
-    successNotification("注册提示", "注册成功, 快去登陆吧!")
-    signInButton.value?.click()
-    registerForm.username = ""
-    registerForm.password = ""
-  }
-  return {
-    registerForm, register
-  }
-}
+import { useLogin, useRegister } from "./scripts"
 
 const { login, loginForm } = useLogin()
 const { register, registerForm } = useRegister()
@@ -89,14 +7,14 @@ const { register, registerForm } = useRegister()
 </script>
 
 <template>
-  <p style="text-align: center;">&lt;&lt;登陆查看我的待办集&gt;&gt;</p>
+  <p class="form-title">&lt;&lt;登陆查看我的待办集&gt;&gt;</p>
   <div class='container' ref="container" id='container'>
     <div class="form-container sign-up-container">
       <!-- 注册 -->
       <form action="javascript:;">
         <h1>用户注册</h1>
         <input v-model="registerForm.username" type="text" placeholder="用户名">
-        <input v-model="registerForm.password" type="password" placeholder="密码">
+        <input v-model="registerForm.password" autocomplete="off" type="password" placeholder="密码">
         <button @click="register">注册</button>
       </form>
     </div>
@@ -105,7 +23,7 @@ const { register, registerForm } = useRegister()
       <form action="javascript:;">
         <h1>用户登陆</h1>
         <input v-model="loginForm.username" type="text" placeholder="用户名">
-        <input v-model="loginForm.password" type="password" placeholder="密码">
+        <input v-model="loginForm.password" autocomplete="off" type="password" placeholder="密码">
         <button @click="login">登陆</button>
       </form>
     </div>
@@ -176,6 +94,11 @@ a {
   height: 100%;
   justify-content: center;
   align-items: center;
+}
+
+.form-title {
+  text-align: center;
+  font-size: 40px;
 }
 
 .form-container input {
