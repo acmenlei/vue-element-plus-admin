@@ -1,6 +1,13 @@
 <template>
   <router-view />
+  <!-- <div>
+    {{ person.name }}
+  </div> -->
 </template>
+
+<script setup lang="ts">
+
+</script>
 
 <style>
 #app {

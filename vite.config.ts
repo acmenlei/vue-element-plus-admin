@@ -9,7 +9,7 @@ const TRUE = 'true' // 常量
 export default ({ mode, command }) => {
   const ENV = loadEnv(mode, process.cwd()) // 加载指定模式(dev || prod)的环境变量
   // 读取全局scss文件
-  const scssResources = []
+  const scssResources: string[] = []
   fs.readdirSync(`src/assets/scss`).map(file => {
     if (fs.statSync(`src/assets/scss/${file}`).isFile()) {
       scssResources.push(`@import "src/assets/scss/${file}";`)

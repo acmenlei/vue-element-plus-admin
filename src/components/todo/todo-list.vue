@@ -1,11 +1,11 @@
 <script setup lang='ts'>
 import { useUserStore } from '@/store/modules/user';
 import { useTodo } from './scripts'
-
+import { debounce } from "lodash-es"
 // use Todo List Logic...
 const { tasks, task, queryTodo, submitTodo, changeTodo, deleteTodo, editTodo } = useTodo();
 // init tasks data...
-queryTodo()
+debounce(queryTodo, 100)
 // logout current account
 function logout() {
   useUserStore().logout()
