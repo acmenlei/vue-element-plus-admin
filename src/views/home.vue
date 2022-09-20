@@ -1,10 +1,7 @@
 <script setup lang='ts'>
-
+import HelloWorld from '@/components/HelloWorld.vue';
 </script>
 
 <template>
-  <el-card id="home">我是home页面</el-card>
+  <HelloWorld />
 </template>
-
-<style lang='scss' scoped>
-</style>
